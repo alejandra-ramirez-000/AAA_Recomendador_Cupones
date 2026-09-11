@@ -1,0 +1,16 @@
+# Dataset crudo (808MB, público — cada uno lo baja con data/raw/README.md)
+data/raw/*.csv
+
+# Carpetas de descarga temporales (duplicado ya movido a data/raw/)
+Datos/
+Datos-*.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Sistema
+.DS_Store
+Thumbs.db
