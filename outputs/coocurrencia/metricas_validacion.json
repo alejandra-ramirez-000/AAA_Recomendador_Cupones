@@ -1,0 +1,70 @@
+{
+  "coocurrencia": [
+    {
+      "k": 5,
+      "hogares_evaluables": 2085,
+      "precision": 0.006811,
+      "recall": 0.00497,
+      "hit_rate": 0.030695,
+      "ndcg": 0.007786
+    },
+    {
+      "k": 10,
+      "hogares_evaluables": 2085,
+      "precision": 0.005947,
+      "recall": 0.008312,
+      "hit_rate": 0.052278,
+      "ndcg": 0.008274
+    },
+    {
+      "k": 20,
+      "hogares_evaluables": 2085,
+      "precision": 0.005659,
+      "recall": 0.014722,
+      "hit_rate": 0.089688,
+      "ndcg": 0.010526
+    }
+  ],
+  "hibrido": [
+    {
+      "k": 5,
+      "hogares_evaluables": 2085,
+      "precision": 0.007578,
+      "recall": 0.005631,
+      "hit_rate": 0.034053,
+      "ndcg": 0.008522
+    },
+    {
+      "k": 10,
+      "hogares_evaluables": 2085,
+      "precision": 0.006715,
+      "recall": 0.009655,
+      "hit_rate": 0.058513,
+      "ndcg": 0.009294
+    },
+    {
+      "k": 20,
+      "hogares_evaluables": 2085,
+      "precision": 0.006235,
+      "recall": 0.015242,
+      "hit_rate": 0.10024,
+      "ndcg": 0.011384
+    }
+  ],
+  "parametros": {
+    "division_dir": "C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\outputs\\division_temporal",
+    "output_dir": "C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\outputs\\coocurrencia",
+    "cantidad_recomendaciones": 20,
+    "soporte_minimo_producto": 500,
+    "soporte_minimo_par": 5,
+    "maximo_productos_recientes": 50,
+    "peso_coocurrencia": 0.8,
+    "data_dir": "C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\data"
+  },
+  "cantidad_asociaciones": 99263,
+  "tiempos_segundos": {
+    "entrenamiento": 5.307,
+    "recomendacion_total": 11.526,
+    "ms_recomendacion_por_hogar": 4.627
+  }
+}

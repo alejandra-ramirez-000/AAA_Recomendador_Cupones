@@ -1,0 +1,196 @@
+{
+  "generado": "2026-10-19T08:37:56",
+  "historial": "entrenamiento + validación + prueba (todas las compras disponibles)",
+  "configuracion": {
+    "fecha_de_congelamiento": "2026-10-15",
+    "k": 10,
+    "repeat": {
+      "modelo": "baseline_frecuencia_recencia",
+      "ndcg@10": 0.265452,
+      "hit_rate@10": 0.645352,
+      "baseline": "baseline_frecuencia_recencia",
+      "ndcg@10_baseline": 0.265452,
+      "mejora_relativa_ndcg": 0.0
+    },
+    "explore": {
+      "modelo": "als_explore",
+      "ndcg@10": 0.017432,
+      "hit_rate@10": 0.094964,
+      "baseline": "baseline_popularidad",
+      "ndcg@10_baseline": 0.014842,
+      "mejora_relativa_ndcg": 0.1745
+    },
+    "mezcla": {
+      "proporcion_repeat": 0.7,
+      "posiciones_repeat": 7,
+      "posiciones_explore": 3,
+      "orden": "repeat primero, luego explore; si un tipo no alcanza su cupo se completa con el otro",
+      "regla": "máximo NDCG@10 total con al menos 3 posiciones explore",
+      "metricas_validacion": {
+        "ndcg": 0.167833,
+        "hit_rate": 0.501405,
+        "hit_rate_explore": 0.040288
+      },
+      "referencia_sin_minimo_explore": {
+        "posiciones_repeat": 10,
+        "ndcg": 0.180143,
+        "hit_rate": 0.527098
+      }
+    },
+    "parametros_als": {
+      "factores": 32,
+      "regularizacion": 0.1,
+      "alpha": 2.0,
+      "iteraciones": 30,
+      "semilla": 42,
+      "pasos_gradiente_conjugado": 3,
+      "criterio_de_seleccion": "max explore NDCG@10 en validación"
+    }
+  },
+  "reglas": {
+    "descripcion": "Reglas de elegibilidad para cupón. Se aplican después del ranking y no modifican el entrenamiento. Son supuestos explícitos del equipo, no datos del supermercado (ver D-008).",
+    "exigir_catalogo": true,
+    "evitar_duplicados": true,
+    "departamentos_excluidos": {
+      "KIOSK-GAS": "Combustible: precio regulado y no es objetivo de cupones de supermercado.",
+      "MISC. TRANS.": "Transacción administrativa, no es un producto.",
+      "MISC SALES TRAN": "Transacción administrativa, no es un producto.",
+      "COUP/STR & MFG": "Registro de cupones o descuentos, no es un producto.",
+      "CHARITABLE CONT": "Donación benéfica, no es un producto.",
+      "POSTAL CENTER": "Servicio postal, no es un producto.",
+      "RX": "Medicamento con receta: no se promociona con cupones."
+    },
+    "categorias_excluidas": {
+      "CIGARETTES": "Tabaco: su promoción está prohibida (en Uruguay, Ley 18.256).",
+      "CIGARS": "Tabaco: su promoción está prohibida (en Uruguay, Ley 18.256).",
+      "TOBACCO OTHER": "Tabaco: su promoción está prohibida (en Uruguay, Ley 18.256)."
+    },
+    "evitar_variantes_en_lista": true,
+    "evitar_variantes_en_explore": true,
+    "soporte_minimo_canastas_explore": 10,
+    "productos_sin_stock": [],
+    "margen_minimo": null,
+    "solo_productos_con_cupon_historico": false
+  },
+  "metricas_prueba": {
+    "sistema_final": {
+      "lista_combinada": {
+        "k": 10,
+        "hogares_evaluables": 2491,
+        "precision": 0.094179,
+        "recall": 0.140151,
+        "hit_rate": 0.507427,
+        "ndcg": 0.17397
+      },
+      "aciertos_explore_en_lista": {
+        "k": 10,
+        "hogares_evaluables": 2094,
+        "precision": 0.004489,
+        "recall": 0.008912,
+        "hit_rate": 0.043935,
+        "ndcg": 0.011296
+      },
+      "sistema": {
+        "k": 10,
+        "cobertura_hogares": 1.0,
+        "cobertura_productos": 0.063699,
+        "productos_distintos_recomendados": 5827,
+        "participacion_top_10_productos": 0.285428,
+        "gini_exposicion": 0.982039,
+        "departamentos_distintos_por_lista": 3.368527,
+        "porcentaje_con_explicacion": 0.0
+      }
+    },
+    "componentes": {
+      "repeat_frecuencia_recencia": [
+        {
+          "k": 5,
+          "hogares_evaluables": 2031,
+          "precision": 0.18385,
+          "recall": 0.219144,
+          "hit_rate": 0.556869,
+          "ndcg": 0.270223
+        },
+        {
+          "k": 10,
+          "hogares_evaluables": 2031,
+          "precision": 0.134958,
+          "recall": 0.294475,
+          "hit_rate": 0.645002,
+          "ndcg": 0.273717
+        },
+        {
+          "k": 20,
+          "hogares_evaluables": 2031,
+          "precision": 0.098178,
+          "recall": 0.396671,
+          "hit_rate": 0.738552,
+          "ndcg": 0.297486
+        }
+      ],
+      "explore_als": [
+        {
+          "k": 5,
+          "hogares_evaluables": 2094,
+          "precision": 0.013085,
+          "recall": 0.012835,
+          "hit_rate": 0.062082,
+          "ndcg": 0.017135
+        },
+        {
+          "k": 10,
+          "hogares_evaluables": 2094,
+          "precision": 0.00979,
+          "recall": 0.017211,
+          "hit_rate": 0.086437,
+          "ndcg": 0.017029
+        },
+        {
+          "k": 20,
+          "hogares_evaluables": 2094,
+          "precision": 0.008883,
+          "recall": 0.02942,
+          "hit_rate": 0.144222,
+          "ndcg": 0.020645
+        }
+      ]
+    },
+    "referencias_no_seleccionadas": {
+      "explore_popularidad": [
+        {
+          "k": 5,
+          "hogares_evaluables": 2094,
+          "precision": 0.008787,
+          "recall": 0.010459,
+          "hit_rate": 0.041547,
+          "ndcg": 0.013584
+        },
+        {
+          "k": 10,
+          "hogares_evaluables": 2094,
+          "precision": 0.007259,
+          "recall": 0.014765,
+          "hit_rate": 0.065425,
+          "ndcg": 0.014378
+        },
+        {
+          "k": 20,
+          "hogares_evaluables": 2094,
+          "precision": 0.006137,
+          "recall": 0.020441,
+          "hit_rate": 0.101242,
+          "ndcg": 0.016058
+        }
+      ],
+      "lista_solo_repeat": {
+        "k": 10,
+        "hogares_evaluables": 2491,
+        "precision": 0.110116,
+        "recall": 0.156075,
+        "hit_rate": 0.526295,
+        "ndcg": 0.186649
+      }
+    }
+  },
+  "hogares": 2491
+}

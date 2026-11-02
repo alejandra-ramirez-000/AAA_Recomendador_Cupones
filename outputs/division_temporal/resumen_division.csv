@@ -1,0 +1,4 @@
+particion,hogares,canastas,lineas_de_producto
+entrenamiento,2491,270892,2525115
+validacion,2491,2491,27716
+prueba,2491,2491,28280

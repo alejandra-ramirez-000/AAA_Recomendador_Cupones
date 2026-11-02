@@ -1,0 +1,16 @@
+# Configuración local del prototipo.
+[server]
+# Solo accesible desde este equipo: la demo no se expone a la red.
+address = "localhost"
+port = 8501
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+# Paleta corporativa: violeta de marca + verde de acción (botones primarios).
+primaryColor = "#7ED957"
+backgroundColor = "#F8F9FB"
+secondaryBackgroundColor = "#EDE7F6"
+textColor = "#2D1B4E"
+font = "sans serif"

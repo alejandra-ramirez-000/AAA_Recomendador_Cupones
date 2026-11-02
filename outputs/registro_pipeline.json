@@ -1,0 +1,39 @@
+{
+  "entorno": {
+    "fecha": "2026-10-19T08:35:20",
+    "python": "3.14.3",
+    "sistema": "Windows-11-10.0.26200-SP0",
+    "numpy": "2.4.3",
+    "pandas": "3.0.1",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.1",
+    "seaborn": "0.13.2",
+    "streamlit": "1.57.0",
+    "git_commit": "2e27cc9 (con cambios sin commitear)"
+  },
+  "etapas": [
+    {
+      "etapa": "reglas",
+      "comando": "-m src.reglas_negocio --division-dir C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\outputs\\division_temporal --resultados-dir C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\outputs --configuracion C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\config\\modelo_final.json --reglas C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\config\\reglas_negocio.json --data-dir C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\data --output-dir C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\outputs\\reglas",
+      "segundos": 33.0,
+      "codigo_salida": 0
+    },
+    {
+      "etapa": "demo",
+      "comando": "-m src.preparar_demo --division-dir C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\outputs\\division_temporal --resultados-dir C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\outputs --configuracion C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\config\\modelo_final.json --reglas C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\config\\reglas_negocio.json --data-dir C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\data --output-dir C:\\Users\\alera\\OneDrive\\Desktop\\cupon\\Proyecto_AAA\\outputs\\demo",
+      "segundos": 122.2,
+      "codigo_salida": 0
+    }
+  ],
+  "datos_intactos": true,
+  "huellas_datos": {
+    "campaign_desc.csv": "632535c6bcdd97b5681e84c2c0652ddc4eaca8a0f899a3bb37dae8dbdc089684",
+    "campaign_table.csv": "a716f88953c9ddf8847e191d862e8d022afd19cf7419f52cbe6dde950a121f21",
+    "causal_data.csv": "60ed7021fefc209c0caf36fcf95d1e93693775acfdac01fc9ee38273da88937a",
+    "coupon.csv": "718f4d466df8a54bbff45f340e0b601049721b0715503394a601bac3093c727d",
+    "coupon_redempt.csv": "70a98f3bfb28be0dd850f19c8d806d2a23e44014546651367b21538db6fba1f8",
+    "hh_demographic.csv": "aeb10246d0c4f3d3433d1f441265b6c7e70b0926129b834a3b589517948b9f22",
+    "product.csv": "7ecbcec41e0f1e5a51b43a359965cc50dc5586a2b900a378b64032750fedc949",
+    "transaction_data.csv": "3a685c0729cef664d634486189f774518b84f53cde7cbf701a5963238692b476"
+  }
+}

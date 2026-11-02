@@ -1,0 +1,46 @@
+{
+  "fecha_de_congelamiento": "2026-10-15",
+  "k": 10,
+  "repeat": {
+    "modelo": "baseline_frecuencia_recencia",
+    "ndcg@10": 0.265452,
+    "hit_rate@10": 0.645352,
+    "baseline": "baseline_frecuencia_recencia",
+    "ndcg@10_baseline": 0.265452,
+    "mejora_relativa_ndcg": 0.0
+  },
+  "explore": {
+    "modelo": "als_explore",
+    "ndcg@10": 0.017432,
+    "hit_rate@10": 0.094964,
+    "baseline": "baseline_popularidad",
+    "ndcg@10_baseline": 0.014842,
+    "mejora_relativa_ndcg": 0.1745
+  },
+  "mezcla": {
+    "proporcion_repeat": 0.7,
+    "posiciones_repeat": 7,
+    "posiciones_explore": 3,
+    "orden": "repeat primero, luego explore; si un tipo no alcanza su cupo se completa con el otro",
+    "regla": "máximo NDCG@10 total con al menos 3 posiciones explore",
+    "metricas_validacion": {
+      "ndcg": 0.167833,
+      "hit_rate": 0.501405,
+      "hit_rate_explore": 0.040288
+    },
+    "referencia_sin_minimo_explore": {
+      "posiciones_repeat": 10,
+      "ndcg": 0.180143,
+      "hit_rate": 0.527098
+    }
+  },
+  "parametros_als": {
+    "factores": 32,
+    "regularizacion": 0.1,
+    "alpha": 2.0,
+    "iteraciones": 30,
+    "semilla": 42,
+    "pasos_gradiente_conjugado": 3,
+    "criterio_de_seleccion": "max explore NDCG@10 en validación"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "descripcion": "Reglas de elegibilidad para cupón. Se aplican después del ranking y no modifican el entrenamiento. Son supuestos explícitos del equipo, no datos del supermercado (ver D-008).",
+  "exigir_catalogo": true,
+  "evitar_duplicados": true,
+  "departamentos_excluidos": {
+    "KIOSK-GAS": "Combustible: precio regulado y no es objetivo de cupones de supermercado.",
+    "MISC. TRANS.": "Transacción administrativa, no es un producto.",
+    "MISC SALES TRAN": "Transacción administrativa, no es un producto.",
+    "COUP/STR & MFG": "Registro de cupones o descuentos, no es un producto.",
+    "CHARITABLE CONT": "Donación benéfica, no es un producto.",
+    "POSTAL CENTER": "Servicio postal, no es un producto.",
+    "RX": "Medicamento con receta: no se promociona con cupones."
+  },
+  "categorias_excluidas": {
+    "CIGARETTES": "Tabaco: su promoción está prohibida (en Uruguay, Ley 18.256).",
+    "CIGARS": "Tabaco: su promoción está prohibida (en Uruguay, Ley 18.256).",
+    "TOBACCO OTHER": "Tabaco: su promoción está prohibida (en Uruguay, Ley 18.256)."
+  },
+  "evitar_variantes_en_lista": true,
+  "evitar_variantes_en_explore": true,
+  "soporte_minimo_canastas_explore": 10,
+  "productos_sin_stock": [],
+  "margen_minimo": null,
+  "solo_productos_con_cupon_historico": false
+}

@@ -1,0 +1,10 @@
+lista,segmento,hogares_del_segmento,k,hogares_evaluables,precision,recall,hit_rate,ndcg
+repeat: frecuencia + recencia,corto (1-48 canastas),838,10,586,0.136177,0.354389,0.668942,0.297875
+repeat: frecuencia + recencia,medio (49-116 canastas),830,10,694,0.128386,0.252784,0.631124,0.237819
+repeat: frecuencia + recencia,largo (117-1296 canastas),823,10,753,0.123108,0.287093,0.640106,0.265688
+explore: popularidad,corto (1-48 canastas),838,10,771,0.013878,0.027352,0.123217,0.025447
+explore: popularidad,medio (49-116 canastas),830,10,713,0.006031,0.00902,0.058906,0.0108
+explore: popularidad,largo (117-1296 canastas),823,10,601,0.002329,0.005664,0.021631,0.006034
+explore: ALS,corto (1-48 canastas),838,10,771,0.018288,0.031959,0.155642,0.028327
+explore: ALS,medio (49-116 canastas),830,10,713,0.009257,0.01236,0.081346,0.013503
+explore: ALS,largo (117-1296 canastas),823,10,601,0.003494,0.01251,0.033278,0.008116

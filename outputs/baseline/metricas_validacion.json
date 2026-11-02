@@ -1,0 +1,59 @@
+{
+  "repeat": [
+    {
+      "k": 5,
+      "hogares_evaluables": 2033,
+      "precision": 0.172946,
+      "recall": 0.209622,
+      "hit_rate": 0.539597,
+      "ndcg": 0.255418
+    },
+    {
+      "k": 10,
+      "hogares_evaluables": 2033,
+      "precision": 0.128677,
+      "recall": 0.294779,
+      "hit_rate": 0.645352,
+      "ndcg": 0.265452
+    },
+    {
+      "k": 20,
+      "hogares_evaluables": 2033,
+      "precision": 0.092941,
+      "recall": 0.400395,
+      "hit_rate": 0.742253,
+      "ndcg": 0.290043
+    }
+  ],
+  "explore": [
+    {
+      "k": 5,
+      "hogares_evaluables": 2085,
+      "precision": 0.009784,
+      "recall": 0.010942,
+      "hit_rate": 0.046523,
+      "ndcg": 0.014802
+    },
+    {
+      "k": 10,
+      "hogares_evaluables": 2085,
+      "precision": 0.007866,
+      "recall": 0.014831,
+      "hit_rate": 0.071942,
+      "ndcg": 0.014842
+    },
+    {
+      "k": 20,
+      "hogares_evaluables": 2085,
+      "precision": 0.006715,
+      "recall": 0.021683,
+      "hit_rate": 0.109832,
+      "ndcg": 0.016715
+    }
+  ],
+  "tiempos_segundos": {
+    "entrenamiento": 1.435,
+    "recomendacion_total": 1.531,
+    "ms_recomendacion_por_hogar": 0.614
+  }
+}

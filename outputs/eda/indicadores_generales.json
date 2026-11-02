@@ -1,0 +1,10 @@
+{
+  "hogares": 2500,
+  "canastas": 276484,
+  "productos_comprados": 92339,
+  "dias_observados": 711,
+  "semanas_observadas": 102,
+  "hogares_con_al_menos_3_canastas": 2492,
+  "porcentaje_hogares_con_al_menos_3_canastas": 99.68,
+  "filas_con_cantidad_cero": 14466
+}

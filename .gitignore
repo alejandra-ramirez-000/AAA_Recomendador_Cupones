@@ -1,16 +1,25 @@
-# Dataset crudo (808MB, público — cada uno lo baja con data/raw/README.md)
-data/raw/*.csv
-
-# Carpetas de descarga temporales (duplicado ya movido a data/raw/)
-Datos/
-Datos-*.zip
-
-# Python
+# Archivos compilados de Python.
 __pycache__/
 *.pyc
-.venv/
-venv/
 
-# Sistema
-.DS_Store
-Thumbs.db
+# Entorno virtual local.
+.venv/
+
+# Archivos temporales (por ejemplo, imágenes extraídas de los PDF de la consigna).
+tmp/
+
+# Feedback simulado generado al usar la demo.
+outputs/demo/feedback_simulado.csv
+
+# Dataset crudo (dunnhumby - The Complete Journey): ~808MB, público, no se sube a git.
+# Se descarga aparte y se coloca en data/ (ver README.md).
+data/*.csv
+
+# Resultados intermedios pesados (decenas/cientos de MB): se regeneran con el pipeline,
+# no hace falta versionarlos. El resto de outputs/ (reportes, métricas, gráficos chicos)
+# sí se sube para que se pueda ver sin correr nada.
+outputs/division_temporal/interacciones_entrenamiento.csv
+outputs/baseline/perfil_repeat_entrenamiento.csv
+
+# Memoria interna de Claude Code para este proyecto (no es parte del proyecto en sí).
+.codebase-memory/

@@ -1,0 +1,10 @@
+fecha: 2026-10-19T08:35:20
+python: 3.14.3
+sistema: Windows-11-10.0.26200-SP0
+numpy: 2.4.3
+pandas: 3.0.1
+scipy: 1.18.1
+matplotlib: 3.11.1
+seaborn: 0.13.2
+streamlit: 1.57.0
+git_commit: 2e27cc9 (con cambios sin commitear)

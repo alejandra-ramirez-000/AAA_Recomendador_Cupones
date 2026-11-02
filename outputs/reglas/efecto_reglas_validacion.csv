@@ -1,0 +1,4 @@
+etapa,hit_rate,ndcg,precision,recall,hit_rate_explore,cobertura_hogares,productos_distintos,departamentos_por_lista,posiciones_no_elegibles,hogares_con_lista_incompleta,posiciones_explore
+sin_reglas,0.501405,0.167833,0.089081,0.14227,0.040288,1.0,5925,3.356483,1483,0,7492
+con_reglas,0.45283,0.134772,0.083782,0.091261,0.041247,1.0,6116,3.002007,0,0,7497
+con_reglas_objetivo_elegible,0.480384,0.143501,0.087402,0.101603,0.042054,1.0,6116,3.002007,0,0,7497

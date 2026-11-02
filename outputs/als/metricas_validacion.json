@@ -1,0 +1,69 @@
+{
+  "repeat": [
+    {
+      "k": 5,
+      "hogares_evaluables": 2033,
+      "precision": 0.089129,
+      "recall": 0.108108,
+      "hit_rate": 0.338908,
+      "ndcg": 0.127252
+    },
+    {
+      "k": 10,
+      "hogares_evaluables": 2033,
+      "precision": 0.071471,
+      "recall": 0.175022,
+      "hit_rate": 0.461879,
+      "ndcg": 0.141019
+    },
+    {
+      "k": 20,
+      "hogares_evaluables": 2033,
+      "precision": 0.056862,
+      "recall": 0.260403,
+      "hit_rate": 0.59518,
+      "ndcg": 0.165246
+    }
+  ],
+  "explore": [
+    {
+      "k": 5,
+      "hogares_evaluables": 2085,
+      "precision": 0.01295,
+      "recall": 0.012069,
+      "hit_rate": 0.060911,
+      "ndcg": 0.016487
+    },
+    {
+      "k": 10,
+      "hogares_evaluables": 2085,
+      "precision": 0.010935,
+      "recall": 0.019651,
+      "hit_rate": 0.094964,
+      "ndcg": 0.017432
+    },
+    {
+      "k": 20,
+      "hogares_evaluables": 2085,
+      "precision": 0.008921,
+      "recall": 0.029192,
+      "hit_rate": 0.142926,
+      "ndcg": 0.019756
+    }
+  ],
+  "parametros": {
+    "factores": 32,
+    "regularizacion": 0.1,
+    "alpha": 2.0,
+    "iteraciones": 30,
+    "semilla": 42,
+    "pasos_gradiente_conjugado": 3,
+    "criterio_de_seleccion": "max explore NDCG@10 en validación"
+  },
+  "configuraciones_evaluadas": 16,
+  "tiempos_segundos": {
+    "entrenamiento": 76.977,
+    "recomendacion_total": 6.042,
+    "ms_recomendacion_por_hogar": 2.426
+  }
+}

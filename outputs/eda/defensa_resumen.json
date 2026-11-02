@@ -1,0 +1,24 @@
+{
+  "repeticion": {
+    "media_por_canasta": 0.5015,
+    "media_por_linea": 0.4652,
+    "media_por_canasta_variante": 0.607,
+    "canastas_analizadas": 270892
+  },
+  "objetivos_validacion": {
+    "hogares": 2491,
+    "con_recompra": 2033,
+    "con_producto_nuevo": 2085,
+    "con_ambos": 1627,
+    "solo_recompra": 406,
+    "solo_producto_nuevo": 458,
+    "ninguno": 0
+  },
+  "concentracion": {
+    "productos_comprados": 90927,
+    "participacion_top_1_pct": 0.3485,
+    "participacion_top_10_pct": 0.768,
+    "productos_comprados_en_una_sola_canasta": 33092,
+    "gini": 0.843594
+  }
+}

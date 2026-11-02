@@ -1,0 +1,22 @@
+[
+  {
+    "household_key": 221,
+    "caso": "Historial típico (79 canastas)"
+  },
+  {
+    "household_key": 1510,
+    "caso": "Historial más largo (1298 canastas)"
+  },
+  {
+    "household_key": 186,
+    "caso": "Historial más corto (3 canastas)"
+  },
+  {
+    "household_key": 956,
+    "caso": "Muchos candidatos filtrados por reglas"
+  },
+  {
+    "household_key": 20,
+    "caso": "Sugerencia explore con explicación muy clara"
+  }
+]
