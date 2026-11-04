@@ -349,3 +349,52 @@ qué alternativas se consideraron.
   queda como mejora futura: la proporción repeat/explore podría depender de
   la antigüedad del hogar, con más explore para clientes nuevos. Debería
   validarse en un experimento nuevo, porque la prueba ya fue usada (D-007).
+
+## D-012 - Cliente simulado: recomendaciones en vivo sin reentrenar ALS
+
+- **Fecha:** 2026-11-02.
+- **Problema:** para la demostración, se quería poder crear un cliente que no
+  existe en el dataset, armarle un historial de compras dentro de la propia
+  app y ver qué cupones le tocarían — sin volver a correr el pipeline.
+- **Por qué no se usó ALS para ese cliente:** ALS aprende un vector latente
+  por hogar ajustando toda la matriz de entrenamiento; anotar un hogar nuevo
+  sin reentrenar exigiría una proyección ("fold-in") que no está implementada
+  y que además volvería a entrenar sobre un dataset distinto al evaluado en
+  prueba (D-007), mezclando lo congelado con lo exploratorio.
+- **Decisión:**
+  - **Repeat:** se reutiliza tal cual `construir_perfil_repeat`
+    (`src/recomendar_baseline.py`, D-004) sobre el historial que arma el
+    propio usuario en la app. Es la misma fórmula, importada, no reescrita.
+  - **Explore:** se reutiliza el modelo de **coocurrencia** (D-005, descartado
+    para el sistema real por rendimiento) aplicado en vivo sobre los
+    productos del historial simulado, con respaldo en popularidad si faltan
+    candidatos. A diferencia de ALS, la coocurrencia no necesita reentrenar:
+    solo busca en una tabla de asociaciones ya calculada
+    (`outputs/coocurrencia/asociaciones_principales.csv`).
+  - **Reglas de negocio:** se reutiliza `aplicar_reglas` (D-008) tal cual,
+    para que un cliente simulado pase por las mismas exclusiones que uno
+    real.
+- **Honestidad del resultado:** la app etiqueta explícitamente que el puntaje
+  de explore para un cliente simulado es "coocurrencia", no ALS, y que los
+  descuentos (% OFF) son simulados. No se presenta como una medición
+  equivalente a la de la sección 7 del informe: es una demostración del
+  mismo motor de reglas y de la fórmula de repeat, no una nueva evaluación.
+- **Consecuencia:** permite demostrar el flujo completo (entrada → modelo →
+  reglas → salida) con cualquier combinación de productos, en vivo, durante
+  la defensa, sin depender de los 2.491 hogares ya precalculados.
+
+## D-013 - Rediseño visual de la app
+
+- **Fecha:** 2026-11-02.
+- **Decisión:** se rediseñó `app/app.py` con una identidad visual propia
+  (paleta violeta/verde, tipografía Poppins + Inter, navbar, tarjetas de
+  cupón con ícono y descuento destacado) y se reemplazaron los emoji por
+  íconos vectoriales de la familia Material (nativos de Streamlit en botones
+  y pestañas; vía fuente web en los bloques con HTML propio), para que se
+  vea consistente entre sistemas operativos.
+- **Por qué:** el prototipo original (D-009) priorizó la función sobre la
+  forma; de cara a la defensa y a mostrarle el flujo a alguien ajeno al
+  equipo, una interfaz prolija ayuda a que la demostración se entienda sin
+  necesitar explicación adicional. No cambia ningún modelo, dato ni regla.
+- **Alcance:** solo `app/app.py` y `.streamlit/config.toml`. El pipeline
+  (`src/`) y sus 49 pruebas no se tocaron.

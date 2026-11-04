@@ -14,7 +14,9 @@ Luisa Flores - 5534744-3
 
 Alvaro Barreto - 5536617-2
 
-**19/10/2026**
+**02/11/2026**
+
+Repositorio: [github.com/alejandra-ramirez-000/AAA_Recomendador_Cupones](https://github.com/alejandra-ramirez-000/AAA_Recomendador_Cupones)
 
 ---
 
@@ -36,8 +38,10 @@ prueba nunca vista.
 En prueba, el **50,7 %** de los hogares compró al menos uno de los 10 productos
 sugeridos en su siguiente canasta (Hit Rate@10). El componente repeat acierta en
 el 64,5 % de los hogares; ALS supera a la popularidad en explore (8,6 % frente a
-6,5 %) y recomienda 13 veces más productos distintos. Un prototipo en Streamlit
-muestra el recorrido completo con explicaciones por producto.
+6,5 %) y recomienda 13 veces más productos distintos. Una app en Streamlit
+muestra el recorrido completo con explicaciones por producto, tanto para
+cualquier hogar real como para un **cliente simulado** armado en el momento
+(sección 9.2), para poder demostrar el sistema en vivo durante la defensa.
 
 Los resultados miden coincidencia con compras posteriores, **no el efecto causal
 de un cupón**: demostrar que un cupón aumenta ventas requeriría una prueba A/B.
@@ -168,10 +172,20 @@ Reglas de negocio configurables ───────────── src/regl
 Lista final: 7 repeat + 3 explore, explicada ─ src/preparar_demo.py
    │
    ▼
-Prototipo para el área comercial ──────────── app/app.py (Streamlit)
+Prototipo para clientes reales ─────────────── app/app.py (Streamlit)
    │
    ▼
-Feedback simulado (👍/👎) → registro para un futuro reentrenamiento
+Feedback simulado (reclamo/canje) → registro para un futuro reentrenamiento
+
+Camino paralelo — cliente simulado (sin tocar el pipeline congelado, D-012):
+   historial armado a mano en la app
+      │
+      ├── Repeat: misma fórmula, reutilizada ── src/recomendar_baseline.py
+      ├── Explore: coocurrencia en vivo ───────── outputs/coocurrencia/asociaciones_principales.csv
+      └── Reglas de negocio, reutilizadas ─────── src/reglas_negocio.py
+      │
+      ▼
+   Cupones del cliente simulado, en la misma app
 ```
 
 Todo el flujo se ejecuta con `python -m src.pipeline`, que registra versiones,
@@ -179,10 +193,14 @@ duración de cada etapa y verifica que los datos de entrada no cambien. Las
 etapas de selección y prueba están **congeladas**: solo corren con una opción
 explícita, para no reescribir decisiones ya tomadas ni reutilizar la prueba.
 
-**Qué es prototipo y qué sería producción.** El prototipo lee recomendaciones
-precalculadas. En producción se reentrenaría periódicamente (ALS tarda unos 80
-segundos con todo el historial), las reglas se conectarían a stock y margen
-reales, y el feedback alimentaría el reentrenamiento.
+**Qué es prototipo y qué sería producción.** Para clientes reales, el
+prototipo lee recomendaciones precalculadas. En producción se reentrenaría
+periódicamente (ALS tarda unos 80 segundos con todo el historial), las reglas
+se conectarían a stock y margen reales, y el feedback alimentaría el
+reentrenamiento. Para un **cliente simulado** (creado dentro de la propia
+app, sección 9.2), no hay nada precalculado: el camino paralelo de arriba
+corre en el momento, reutilizando las mismas funciones de repeat y de reglas
+que el sistema real, con coocurrencia en vez de ALS para explore (D-012).
 
 ---
 
@@ -427,37 +445,79 @@ proyecto: la revisión cualitativa encuentra problemas que las métricas no ven.
 
 # 9. Prototipo y ejemplos cualitativos
 
-`app/app.py` (Streamlit, `streamlit run app/app.py`) recorre el flujo **entrada
-→ procesamiento → modelo → salida → interpretación**:
+`app/app.py` (Streamlit, `streamlit run app/app.py`) es una app de cara al
+cliente — no al equipo comercial como en la primera versión del prototipo —
+con dos formas de entrar: un **cliente real** de la base, o un **cliente
+simulado** creado desde cero. Las dos recorren el mismo flujo **entrada →
+procesamiento → modelo → reglas → salida → interpretación**, mostrado con
+una identidad visual propia (paleta violeta/verde, tipografía e íconos
+vectoriales consistentes; D-013).
 
-1. **Entrada:** se elige un hogar de ejemplo o cualquier `household_key`.
-2. **Historial:** canastas, gasto, departamentos principales, productos más
-   comprados y última canasta.
-3. **Recomendaciones:** 7 repeat y 3 explore con puntaje y explicación.
-4. **Reglas:** candidatos descartados y su motivo.
-5. **Salida:** exportación CSV y feedback simulado (👍/👎) que se registra para un
-   futuro reentrenamiento.
-6. **Sobre el modelo:** cómo funciona y resultados medidos, con la aclaración
-   de que no miden efecto causal.
+## 9.1 Cliente real
 
-Las listas se precalculan entrenando con todo el historial disponible y no se
-entrena en vivo, por lo que la demo es determinista. La app solo es accesible
-desde el propio equipo.
+1. **Entrada:** se busca cualquiera de los 2.491 hogares por número de socio
+   (con autocompletado) o se elige uno de los 5 casos de ejemplo preparados.
+2. **Cupones para vos:** 7 repeat y 3 explore, precalculados con
+   `src/preparar_demo.py`, cada uno con su % de descuento simulado, el ahorro
+   estimado en pesos (a partir de un precio de referencia calculado como la
+   mediana de lo pagado históricamente por ese producto,
+   `src/calcular_precios_catalogo.py`) y su explicación.
+3. **Catálogo y carrito:** se puede navegar el catálogo completo (20.718
+   productos agrupados por descripción), agregar productos a un carrito y,
+   si alguno tiene un cupón disponible, la app lo sugiere ahí mismo.
+4. **Mis cupones:** billetera donde se "reclama" o se "canjea en caja" cada
+   cupón (simulación: se registra en `outputs/demo/feedback_simulado.csv`
+   para un futuro reentrenamiento).
+5. **Mis compras:** historial real — productos más comprados y última
+   canasta.
+6. **Vista analista** (oculta por defecto): el detalle técnico — puntaje de
+   cada recomendación y los candidatos que las reglas descartaron, con su
+   motivo — para el equipo comercial y para esta defensa.
 
-**Ejemplo — hogar 20 (387 canastas):**
+**Ejemplo — hogar 221 (79 canastas):**
 
-| # | Tipo | Producto | Por qué |
-| --- | --- | --- | --- |
-| 1 | repeat | Cakes: angel fds/cke rolls · Private | Lo compró en 65 canastas; la última vez en su última compra. |
-| 2 | repeat | Fluid milk white only · Private · 1 GA | Lo compró en 86 canastas; la última vez en su penúltima compra. |
-| … | … | … | … |
-| 8 | explore | Hot dog buns · Private · 11 OZ | Los hogares que compran «Hamburger buns», como este, también lo eligen. |
-| 9 | explore | Carrots mini peeled · Private · 1 LB | Afinidad con «Grapes white», que el hogar compra. |
+| # | Tipo | Producto | % OFF | Por qué |
+| --- | --- | --- | ---: | --- |
+| 1 | repeat | Fluid milk white only · Private | 20 % | Lo compró en 55 canastas; la última vez en su última compra. |
+| 2 | repeat | Mainstream wheat/multigrain br · Private · 20 OZ | 16 % | Lo compró en 25 canastas; la última vez en su última compra. |
+| … | … | … | … | … |
+| 8 | explore | Dairy case 100 % pure juice · Private | 29 % | Los hogares que compran «Iws single cheese · Private · 12 OZ», como este, también lo eligen (similitud 0,93). |
+| 10 | explore | Hamburger buns · Private · 12 OZ | 27 % | Los hogares que compran «Hot dog buns · Private · 11 OZ», como este, también lo eligen (similitud 1,00). |
 
-**Casos límite:** un hogar con solo 3 canastas recibe un aviso de poca evidencia
-y su lista se completa con explore si faltan productos repeat; un hogar
-inexistente recibe una lista de respaldo con productos populares elegibles, uno
-por subcategoría.
+**Casos límite:** un hogar con historial corto recibe un aviso de poca
+evidencia y su lista se completa con explore si faltan productos repeat; un
+número de socio inexistente recibe cupones de bienvenida con productos
+populares elegibles en vez de un error.
+
+## 9.2 Cliente simulado — demostración en vivo (D-012)
+
+Pensado para la defensa: permite mostrar el sistema completo con datos
+armados en el momento, sin depender de que un hogar precalculado "quede bien".
+
+1. Se crea un cliente nuevo con un nombre.
+2. Se le arma un historial de compras: se buscan productos en el catálogo y
+   se agrupan en "canastas" (compras pasadas) — a mano, o con un botón que
+   genera 6 canastas de ejemplo al instante.
+3. La app calcula sus cupones **en vivo**: repeat con la fórmula de la
+   sección 5.1 aplicada a ese historial; explore con el modelo de
+   coocurrencia (sección 5.2) sobre los productos de esas canastas; reglas de
+   negocio (sección 8) aplicadas igual que a un cliente real.
+4. El resto del flujo (reclamar, canjear, vista analista) es idéntico.
+
+**Ejemplo — cliente simulado con historial generado automáticamente**
+(6 canastas, 18 productos distintos):
+
+| # | Tipo | Producto | Puntaje | Por qué |
+| --- | --- | --- | ---: | --- |
+| 1 | repeat | Carrots mini peeled · Private · 1 LB | 1,000 | Lo compró en 6 canastas; la última vez en su última compra. |
+| 2 | repeat | Cabbage · National · 14-18 CT | 0,883 | Lo compró en 5 canastas; la última vez en su última compra. |
+| 8 | explore | Snack cake - multi pack · National · 16 OZ | 0,589 | Los hogares que compran «Snack cake - multi pack · National · 12 OZ», como este, también lo eligen (asociación 0,59). |
+
+**Transparencia:** la app etiqueta el puntaje de explore de un cliente
+simulado como "coocurrencia" y no como ALS (sección 6.2 muestra por qué ALS
+rinde mejor en general); la vista analista de un cliente simulado también
+muestra qué candidatos quedaron afuera por las reglas, igual que con un
+hogar real.
 
 ---
 
@@ -475,8 +535,9 @@ por subcategoría.
   automatizadas**, incluida una de integración que corre el pipeline completo
   sobre un dataset sintético. Esa prueba encontró un error real: la evaluación
   final solo sabía reentrenar ALS y fallaba si la selección elegía otro modelo.
-- **Trazabilidad:** cada decisión (D-001 a D-011) está registrada en
-  `BITACORA_DECISIONES.md` con su evidencia y alternativas.
+- **Trazabilidad:** cada decisión (D-001 a D-013, incluidas el cliente
+  simulado y el rediseño visual) está registrada en `BITACORA_DECISIONES.md`
+  con su evidencia y alternativas.
 
 ---
 
@@ -564,11 +625,16 @@ Eso requiere datos propios y un experimento controlado.
 
 # Anexo A — Reproducción
 
+Código fuente: [github.com/alejandra-ramirez-000/AAA_Recomendador_Cupones](https://github.com/alejandra-ramirez-000/AAA_Recomendador_Cupones)
+(el dataset, ~808 MB y público, no se versiona en git; se descarga aparte
+siguiendo `data/README.md`).
+
 ```powershell
 pip install -r requirements.txt
-python -m src.pipeline                 # todo salvo selección y prueba (congeladas)
-python -m unittest discover -s tests   # 49 pruebas
-streamlit run app/app.py               # prototipo en http://localhost:8501
+python -m src.pipeline                   # todo salvo selección y prueba (congeladas)
+python -m src.calcular_precios_catalogo  # precios de referencia para la app
+python -m unittest discover -s tests     # 49 pruebas
+streamlit run app/app.py                 # app en http://localhost:8501
 ```
 
 Detalle de comandos y estructura en `README.md`; decisiones en

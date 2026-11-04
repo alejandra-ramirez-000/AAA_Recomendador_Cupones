@@ -22,6 +22,7 @@ Ejecutar desde la raíz del proyecto:
 """
 
 # csv y datetime registran el feedback simulado (reclamos, descartes, canjes).
+import base64
 import csv
 import json
 import random
@@ -92,6 +93,20 @@ ICONO_DEPARTAMENTO_POR_DEFECTO = "sell"
 # Categorías con más productos: las que se muestran como pastillas de filtro rápido.
 CATEGORIAS_DESTACADAS = ["GROCERY", "DRUG GM", "PRODUCE", "MEAT", "DELI", "PASTRY"]
 
+# Fotos de alimentos por departamento (app/assets/alimentos/<nombre>.jpg). Los
+# departamentos sin foto conservan el ícono vectorial (ICONOS_DEPARTAMENTO).
+DIRECTORIO_ASSETS = Path(__file__).parent / "assets" / "alimentos"
+IMAGENES_DEPARTAMENTO = {
+    "GROCERY": "grocery", "PROD-WHS SALES": "grocery",
+    "PRODUCE": "produce",
+    "MEAT": "meat", "MEAT-PCKGD": "meat",
+    "DELI": "deli", "DELI/SNACK BAR": "deli",
+    "PASTRY": "pastry", "GRO BAKERY": "pastry",
+    "SEAFOOD": "seafood", "SEAFOOD-PCKGD": "seafood",
+    "SPIRITS": "bebidas",
+    "DRUG GM": "farmacia", "NUTRITION": "farmacia",
+}
+
 
 def icono_md(nombre: str) -> str:
     """Shortcode de ícono Material para texto y widgets nativos de Streamlit
@@ -118,6 +133,33 @@ def icono_departamento_md(departamento: str) -> str:
 
 def icono_departamento_html(departamento: str, tamano: int = 22) -> str:
     return icono_html(_nombre_icono_departamento(departamento), tamano)
+
+
+@st.cache_data
+def _imagen_base64(nombre: str) -> str | None:
+    ruta = DIRECTORIO_ASSETS / f"{nombre}.jpg"
+    if not ruta.exists():
+        return None
+    return base64.b64encode(ruta.read_bytes()).decode("ascii")
+
+
+def imagen_departamento_html(departamento: str) -> str:
+    """Foto de la categoría si existe; si no, el ícono vectorial sobre un
+    fondo degradado. Pensada para llenar el banner superior de una tarjeta
+    (clase .coupon-banner, que le da el tamaño y el overflow oculto)."""
+
+    nombre = IMAGENES_DEPARTAMENTO.get(str(departamento).strip().upper())
+    b64 = _imagen_base64(nombre) if nombre else None
+    if not b64:
+        return f'<div class="coupon-banner-fallback">{icono_departamento_html(departamento, 40)}</div>'
+    return f'<img src="data:image/jpeg;base64,{b64}" alt="{nombre}">'
+
+
+def imagen_hero_html() -> str | None:
+    b64 = _imagen_base64("hero_alimentos")
+    if not b64:
+        return None
+    return f'<img class="hero-img" src="data:image/jpeg;base64,{b64}" alt="Alimentos frescos">'
 
 
 def icono_caso(caso: str) -> str:
@@ -211,6 +253,12 @@ def aplicar_estilos() -> None:
             border-radius: 24px; padding: 46px 44px; margin-bottom: 26px; position: relative; overflow: hidden;
         }
         .hero-badge { position: absolute; right: 36px; top: 50%; transform: translateY(-50%); font-size: 4.2rem; opacity: 0.92; }
+        .hero-img {
+            position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+            width: 220px; height: 220px; border-radius: 20px; object-fit: cover;
+            box-shadow: 0 16px 34px rgba(0,0,0,0.28); border: 4px solid rgba(255,255,255,0.3);
+        }
+        @media (max-width: 900px) { .hero-img { display: none; } }
         .hero h1 { font-size: 2.5rem; font-weight: 800; margin: 0 0 10px 0; color: white; max-width: 70%; }
         .hero h1 span { color: var(--color-secundario); }
         .hero p { font-size: 1.05rem; color: rgba(255,255,255,0.88); max-width: 480px; margin: 0; }
@@ -220,14 +268,22 @@ def aplicar_estilos() -> None:
         .trust-item { display: flex; align-items: center; gap: 10px; color: var(--color-texto-principal); font-weight: 600; font-size: 0.92rem; }
         .trust-icon { font-size: 1.5rem; }
 
-        /* --- Tarjetas de cupón --- */
-        .coupon-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-        .coupon-icon-box {
-            width: 50px; height: 50px; border-radius: 14px; font-size: 1.5rem; flex-shrink: 0;
-            background: var(--color-fondo-seccion); display: flex; align-items: center; justify-content: center;
+        /* --- Tarjetas de cupón: banner de foto arriba, con el precio/descuento superpuesto --- */
+        .coupon-banner {
+            position: relative; width: 100%; height: 120px; border-radius: 14px;
+            overflow: hidden; margin-bottom: 12px;
         }
-        .coupon-discount { font-weight: 800; font-size: 1.4rem; color: var(--color-primario); }
-        .coupon-discount.bienvenida { color: var(--color-secundario-oscuro); }
+        .coupon-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .coupon-banner-fallback {
+            width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--color-fondo-seccion), #E3DAF5);
+        }
+        .coupon-discount-badge {
+            position: absolute; top: 10px; right: 10px;
+            background: var(--color-primario); color: white; font-weight: 800; font-size: 1.05rem;
+            padding: 6px 14px; border-radius: 999px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .coupon-discount-badge.bienvenida { background: var(--color-secundario-oscuro); }
 
         [data-testid="stVerticalBlockBorderWrapper"] {
             border-radius: var(--radio) !important;
@@ -662,9 +718,9 @@ def tarjeta_cupon(fila, tipo: str, hogar: int) -> None:
     with st.container(border=True):
         st.markdown(
             f"""
-            <div class="coupon-card-header">
-                <div class="coupon-icon-box">{icono_departamento_html(fila.DEPARTMENT)}</div>
-                <div class="coupon-discount">{descuento}% OFF</div>
+            <div class="coupon-banner">
+                {imagen_departamento_html(fila.DEPARTMENT)}
+                <div class="coupon-discount-badge">{descuento}% OFF</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -696,9 +752,9 @@ def tarjeta_bienvenida(fila, hogar: int) -> None:
     with st.container(border=True):
         st.markdown(
             f"""
-            <div class="coupon-card-header">
-                <div class="coupon-icon-box">{icono_html('celebration')}</div>
-                <div class="coupon-discount bienvenida">10% OFF</div>
+            <div class="coupon-banner">
+                <div class="coupon-banner-fallback">{icono_html('celebration', 40)}</div>
+                <div class="coupon-discount-badge bienvenida">10% OFF</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -739,9 +795,9 @@ def tarjeta_catalogo(demo: dict, fila, hogar: int, tipo: str) -> None:
     with st.container(border=True):
         st.markdown(
             f"""
-            <div class="coupon-card-header">
-                <div class="coupon-icon-box">{icono_departamento_html(fila.DEPARTMENT)}</div>
-                <div class="coupon-discount">${fila.precio_referencia:,.2f}</div>
+            <div class="coupon-banner">
+                {imagen_departamento_html(fila.DEPARTMENT)}
+                <div class="coupon-discount-badge">${fila.precio_referencia:,.2f}</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -892,10 +948,12 @@ def seccion_carrito(demo: dict, hogar: int) -> None:
 def pantalla_login(demo: dict) -> None:
     """Pantalla inicial: elegir un cliente real de la base o crear uno simulado."""
 
+    imagen_hero = imagen_hero_html()
+    insignia_hero = imagen_hero if imagen_hero else f'<div class="hero-badge">{icono_html("shopping_cart", 64)}</div>'
     st.markdown(
         f"""
         <div class="hero">
-            <div class="hero-badge">{icono_html('shopping_cart', 64)}</div>
+            {insignia_hero}
             <h1>Ahorrá más <span>en tus compras</span></h1>
             <p>SuperCoop arma, para cada cliente, los cupones que más le sirven a partir de su propio historial de compras — en tiempo real.</p>
         </div>
@@ -995,11 +1053,11 @@ def seccion_mis_cupones(hogar: int) -> None:
     for producto_id, info in list(billetera.items()):
         with st.container(border=True):
             cols = st.columns([4, 2, 1])
-            clase = "coupon-discount bienvenida" if info["origen"] == "bienvenida" else "coupon-discount"
+            clase = "coupon-discount-badge bienvenida" if info["origen"] == "bienvenida" else "coupon-discount-badge"
             cols[0].markdown(
                 f"""
-                <div class="coupon-card-header">
-                    <div class="coupon-icon-box">{icono_departamento_html(info['departamento'])}</div>
+                <div class="coupon-banner">
+                    {imagen_departamento_html(info['departamento'])}
                     <div class="{clase}">{info['descuento']}% OFF</div>
                 </div>
                 """,
