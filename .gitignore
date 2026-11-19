@@ -5,7 +5,7 @@ __pycache__/
 # Entorno virtual local.
 .venv/
 
-# Archivos temporales (por ejemplo, imágenes extraídas de los PDF de la consigna).
+# Archivos temporales.
 tmp/
 
 # Feedback simulado generado al usar la demo.
@@ -21,5 +21,7 @@ data/*.csv
 outputs/division_temporal/interacciones_entrenamiento.csv
 outputs/baseline/perfil_repeat_entrenamiento.csv
 
-# Memoria interna de Claude Code para este proyecto (no es parte del proyecto en sí).
+# Documentos internos de trabajo y configuración local de herramientas (no se entregan).
+_interno/
+.claude/
 .codebase-memory/

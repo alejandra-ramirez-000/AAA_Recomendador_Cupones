@@ -8,11 +8,9 @@ personalizados a partir del historial de compras anonimizado de cada hogar
 - **explore:** productos que el hogar todavía no compró.
 
 **Informe final (Entregable 2): [`INFORME_FINAL.md`](INFORME_FINAL.md).**
-Diapositivas, guion de demo y guía de defensa: [`PRESENTACION_Y_DEFENSA.md`](PRESENTACION_Y_DEFENSA.md).
 
-El contexto consolidado, los resultados, las decisiones y el plan de cierre se
-encuentran en `CONTEXTO_COMPLETO_PROYECTO.md`. La hoja de ruta operativa está en
-`GUIA_DE_TRABAJO.md` y las decisiones en `BITACORA_DECISIONES.md`.
+Las decisiones del proyecto, con su evidencia y alternativas, están registradas
+en [`BITACORA_DECISIONES.md`](BITACORA_DECISIONES.md).
 
 ## Estado actual
 
@@ -30,7 +28,7 @@ encuentran en `CONTEXTO_COMPLETO_PROYECTO.md`. La hoja de ruta operativa está e
 | 9. Prototipo Streamlit | Completado (D-009) |
 | 10. Pipeline reproducible y pruebas de integración | Completado (D-010) |
 | 11. Informe final | Completado (`INFORME_FINAL.md`) |
-| 12. Presentación y defensa | Material listo (`PRESENTACION_Y_DEFENSA.md`); falta el ensayo |
+| 12. Presentación y defensa | Exposición oral con demo del prototipo |
 
 Los datos originales en `data/` nunca se modifican. El conjunto de prueba
 (`outputs/division_temporal/interacciones_prueba.csv`) no se utiliza hasta
